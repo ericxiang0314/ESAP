@@ -75,7 +75,6 @@ def normalize_game(row: dict) -> dict:
     image_url = resolve_field(row, ["header_image", "image", "image_url", "cover_image"]).strip()
     if not image_url:
         image_url = ""
-
     return {
         "name": name,
         "genre": genre_name,
@@ -88,7 +87,6 @@ def normalize_game(row: dict) -> dict:
 def load_metacritic_index() -> dict[str, dict]:
     if not METACRITIC_FILE or not METACRITIC_FILE.exists():
         return {}
-
     index: dict[str, dict] = {}
     try:
         with METACRITIC_FILE.open("r", encoding="utf-8", errors="ignore", newline="") as handle:
@@ -110,7 +108,7 @@ def load_metacritic_index() -> dict[str, dict]:
 METACRITIC_INDEX = load_metacritic_index()
 
 
-def load_games(limit: int = 250) -> list[dict]:
+def load_games(limit: int | None = None) -> list[dict]:
     if not METACRITIC_FILE or not METACRITIC_FILE.exists():
         return []
 
@@ -129,7 +127,7 @@ def load_games(limit: int = 250) -> list[dict]:
                     if meta.get("price") is not None:
                         game["price"] = float(meta["price"])
                     loaded_games.append(game)
-                if len(loaded_games) >= limit:
+                if limit is not None and len(loaded_games) >= limit:
                     break
             return loaded_games
     except Exception:
@@ -164,17 +162,13 @@ def get_filtered_games(search_text: str = "", genre: str = "", language: str = "
         if selected_tags and not all(tag in [item.lower() for item in game["tags"]] for tag in selected_tags):
             continue
         filtered.append(game)
-
     if sort_by == "rating":
         filtered.sort(key=lambda item: item["rating"], reverse=True)
     elif sort_by == "price":
         filtered.sort(key=lambda item: item["price"])
     else:
         filtered.sort(key=lambda item: item["name"].lower())
-
     return filtered
-
-
 @app.route("/")
 def home():
     selected_profile_name = request.args.get("profile", "").strip()
@@ -183,7 +177,6 @@ def home():
         selected_profile = next((item for item in submissions if str(item.get("name", "")).strip().lower() == selected_profile_name.lower()), None)
     if selected_profile is None:
         selected_profile = submissions[-1] if submissions else None
-
     recommended_games = []
     if selected_profile:
         profile_genres = set([g.lower() for g in selected_profile.get("genres", [])])
@@ -215,7 +208,6 @@ def home():
             featured_games = random.sample(high_score_games, k=min(18, len(high_score_games)))
         else:
             featured_games = random.sample(games, k=min(18, len(games)))
-
     return render_template(
         "index.html",
         latest_profile=selected_profile,
@@ -240,7 +232,6 @@ def game_list():
         tags=selected_tags,
         sort_by=sort_by,
     )
-
     genres, languages, tags = get_filter_options()
     return render_template(
         "game_list.html",
@@ -254,7 +245,6 @@ def game_list():
         languages=languages,
         tags=tags,
     )
-
 @app.route("/about")
 def about():
     return render_template("about.html")
@@ -264,8 +254,6 @@ def add_game_page():
 @app.route("/profile")
 def profile_view():
     return render_template("profile_view.html", submissions=submissions)
-
-
 @app.route("/profile/delete/<int:index>", methods=["POST"])
 def delete_profile(index: int):
     if 0 <= index < len(submissions):
@@ -282,7 +270,6 @@ def edit_profile(index: int):
     if not 0 <= index < len(submissions):
         flash("That profile could not be found.", "error")
         return redirect(url_for("profile_view"))
-
     profile = submissions[index]
     if request.method == "POST":
         profile["name"] = request.form.get("profile_name", "").strip() or "Untitled profile"
@@ -292,7 +279,6 @@ def edit_profile(index: int):
         profile["notes"] = request.form.get("notes", "").strip()
         flash("Profile updated.", "success")
         return redirect(url_for("profile_view"))
-
     genres, languages, tags = get_profile_options()
     return render_template(
         "profile_wizard.html",
@@ -311,9 +297,7 @@ def edit_profile(index: int):
 def profile_step(step: int):
     if step not in {1, 2, 3}:
         return redirect(url_for("profile_step", step=1))
-
     profile_data = dict(session.get("profile_data", {}))
-
     if request.method == "POST":
         if step == 1:
             profile_data["genres"] = request.form.getlist("genres")
@@ -322,15 +306,11 @@ def profile_step(step: int):
         else:
             profile_data["tags"] = request.form.getlist("tags")
             profile_data["notes"] = request.form.get("notes", "").strip()
-
         if step == 1 or request.form.get("profile_name"):
             profile_data["profile_name"] = request.form.get("profile_name", "").strip()
-
         session["profile_data"] = profile_data
-
         if step < 3:
             return redirect(url_for("profile_step", step=step + 1))
-
         profile_name = str(profile_data.get("profile_name", "") or "").strip() or "Untitled profile"
         submission = {
             "timestamp": datetime.utcnow().isoformat() + "Z",
