@@ -264,6 +264,49 @@ def add_game_page():
 @app.route("/profile")
 def profile_view():
     return render_template("profile_view.html", submissions=submissions)
+
+
+@app.route("/profile/delete/<int:index>", methods=["POST"])
+def delete_profile(index: int):
+    if 0 <= index < len(submissions):
+        deleted_name = str(submissions[index].get("name", "")).strip() or f"Profile {index + 1}"
+        del submissions[index]
+        flash(f"Deleted profile '{deleted_name}'.", "success")
+    else:
+        flash("That profile could not be found.", "error")
+    return redirect(url_for("profile_view"))
+
+
+@app.route("/profile/edit/<int:index>", methods=["GET", "POST"])
+def edit_profile(index: int):
+    if not 0 <= index < len(submissions):
+        flash("That profile could not be found.", "error")
+        return redirect(url_for("profile_view"))
+
+    profile = submissions[index]
+    if request.method == "POST":
+        profile["name"] = request.form.get("profile_name", "").strip() or "Untitled profile"
+        profile["genres"] = request.form.getlist("genres")
+        profile["languages"] = request.form.getlist("languages")
+        profile["tags"] = request.form.getlist("tags")
+        profile["notes"] = request.form.get("notes", "").strip()
+        flash("Profile updated.", "success")
+        return redirect(url_for("profile_view"))
+
+    genres, languages, tags = get_profile_options()
+    return render_template(
+        "profile_wizard.html",
+        step=3,
+        genres=genres,
+        languages=languages,
+        tags=tags,
+        selected_genres=profile.get("genres", []),
+        selected_languages=profile.get("languages", []),
+        selected_tags=profile.get("tags", []),
+        profile_name=profile.get("name", ""),
+        notes=profile.get("notes", ""),
+        edit_index=index,
+    )
 @app.route("/profile/step/<int:step>", methods=["GET", "POST"])
 def profile_step(step: int):
     if step not in {1, 2, 3}:
@@ -368,7 +411,6 @@ def submit():
             languages=get_filter_options()[1],
             tags=get_filter_options()[2],
         )
-
     submission = {
         "timestamp": datetime.utcnow().isoformat() + "Z",
         "cpu": cpu,
