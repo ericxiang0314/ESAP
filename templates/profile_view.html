@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="card">
+    <p class="eyebrow">Your profile</p>
+    <h2>View and update your preferences</h2>
+    <p class="hero-copy">Your saved profile choices appear here. You can revisit them anytime and refine them.</p>
+
+    {% if submissions %}
+    <div class="stack">
+        {% for item in submissions[-1:] %}
+        <div class="filter-step">
+            <h3>Latest profile</h3>
+            {% if item.name %}<p><strong>Profile name:</strong> {{ item.name }}</p>{% endif %}
+            {% if item.cpu %}<p><strong>CPU:</strong> {{ item.cpu }}</p>{% endif %}
+            {% if item.gpu %}<p><strong>GPU:</strong> {{ item.gpu }}</p>{% endif %}
+            {% if item.ram_gb %}<p><strong>RAM:</strong> {{ item.ram_gb }} GB</p>{% endif %}
+            {% if item.storage_gb %}<p><strong>Storage:</strong> {{ item.storage_gb }} GB</p>{% endif %}
+            {% if item.budget_usd %}<p><strong>Budget:</strong> ${{ '%.2f'|format(item.budget_usd) }}</p>{% endif %}
+            {% if item.genres %}<p><strong>Genres:</strong> {{ item.genres | join(', ') }}</p>{% endif %}
+            {% if item.languages %}<p><strong>Languages:</strong> {{ item.languages | join(', ') }}</p>{% endif %}
+            {% if item.tags %}<p><strong>Tags:</strong> {{ item.tags | join(', ') }}</p>{% endif %}
+            {% if item.notes %}<p><strong>Notes:</strong> {{ item.notes }}</p>{% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>No profile saved yet. Start the wizard to create one.</p>
+    {% endif %}
+
+    <div class="section-header" style="margin-top: 1rem;">
+        <a class="text-link" href="{{ url_for('profile_step', step=1) }}">Edit profile</a>
+        <a class="text-link" href="{{ url_for('home') }}">Back to catalogue</a>
+    </div>
+</section>
+{% endblock %}

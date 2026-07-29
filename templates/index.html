@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="hero hero-centered">
+    <div class="hero-main">
+        <p class="eyebrow">ESAP Project</p>
+        <h1>Find your Steam Games</h1>
+        <form action="{{ url_for('game_list') }}" method="get" class="hero-search">
+            <input type="text" name="search" placeholder="Search games by name" aria-label="Search games by name">
+            <button type="submit">Search</button>
+        </form>
+
+        {% if submissions %}
+        <div class="profile-switcher">
+            <label for="profile-select">Switch profile</label>
+            <select id="profile-select" onchange="location.href='/?profile=' + encodeURIComponent(this.value)">
+                <option value="" {% if not selected_profile_name %}selected{% endif %}>Latest saved profile</option>
+                {% for item in submissions %}
+                <option value="{{ item.name }}" {% if selected_profile_name==item.name %}selected{% endif %}>{{
+                    item.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        {% endif %}
+
+        {% if recommended_games %}
+        <div class="featured-section">
+            <h2>Recommended for you</h2>
+            <div class="featured-grid">
+                {% for game in recommended_games %}
+                <a class="game-card featured-card" href="{{ url_for('game_list') }}?search={{ game.name }}">
+                    {% if game.image_url %}
+                    <img class="game-image" src="{{ game.image_url }}" alt="{{ game.name }} cover">
+                    {% endif %}
+                    <div class="game-card-top">
+                        <h3>{{ game.name }}</h3>
+                        <span class="pill">{{ game.genre }}</span>
+                    </div>
+                    <p class="game-meta">Metacritic: {% if game.rating is not none and game.rating != 0 and game.rating
+                        != 3.0 %}{{ game.rating }}/100{% else %}N/A{% endif %} · Price: {% if game.price == 0 %}Free{%
+                        else
+                        %}${{ '%.2f'|format(game.price) }}{% endif %}</p>
+                    <div class="tag-row">
+                        {% for tag in game.tags[:3] %}
+                        <span class="tag">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="featured-section">
+            <h2>Featured games</h2>
+            <div class="featured-grid">
+                {% for game in featured_games %}
+                <a class="game-card featured-card" href="{{ url_for('game_list') }}?search={{ game.name }}">
+                    {% if game.image_url %}
+                    <img class="game-image" src="{{ game.image_url }}" alt="{{ game.name }} cover">
+                    {% endif %}
+                    <div class="game-card-top">
+                        <h3>{{ game.name }}</h3>
+                        <span class="pill">{{ game.genre }}</span>
+                    </div>
+                    <p class="game-meta">Metacritic: {% if game.rating is not none and game.rating != 0 and game.rating
+                        != 3.0 %}{{ game.rating }}/100{% else %}N/A{% endif %} · Price: {% if game.price == 0 %}Free{%
+                        else
+                        %}${{ '%.2f'|format(game.price) }}{% endif %}</p>
+                    <div class="tag-row">
+                        {% for tag in game.tags[:3] %}
+                        <span class="tag">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

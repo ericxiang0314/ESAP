@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="card">
+    <p class="eyebrow">Add a game</p>
+    <h2>Share a game you want in the list</h2>
+    <p class="hero-copy">Use this page to add a game manually. It will appear in the catalogue right away.</p>
+
+    <form action="{{ url_for('add_game') }}" method="post" class="stack add-game-form">
+        <div class="filter-grid">
+            <label>
+                Game name
+                <input type="text" name="game_name" placeholder="Example: Baldur's Gate 3" required>
+            </label>
+            <label>
+                Genre
+                <input type="text" name="game_genre" placeholder="RPG" required>
+            </label>
+            <label>
+                Rating
+                <input type="number" step="0.1" name="game_rating" placeholder="4.5">
+            </label>
+            <label>
+                Price (USD)
+                <input type="number" step="0.01" name="game_price" placeholder="59.99">
+            </label>
+        </div>
+        <label>
+            Supported languages
+            <input type="text" name="game_languages" placeholder="English, French, German">
+        </label>
+        <fieldset>
+            <legend>Tags</legend>
+            <div class="checkbox-grid">
+                {% for tag in ['Multiplayer', 'Single-player', 'Competitive', 'Co-op', 'Indie', 'FPS', 'Roguelike',
+                'Turn-based'] %}
+                <label><input type="checkbox" name="game_tags" value="{{ tag }}"> {{ tag }}</label>
+                {% endfor %}
+            </div>
+        </fieldset>
+        <button type="submit">Add game</button>
+    </form>
+</section>
+{% endblock %}
