@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="card game-detail">
+    <div class="section-header">
+        <div>
+            <p class="eyebrow">Game detail</p>
+            <h2 class="single-line-title">{{ game.name }}</h2>
+        </div>
+        <a class="text-link" href="{{ url_for('game_list') }}">Back to catalogue</a>
+    </div>
+
+    {% if game.image_url %}
+    <div class="detail-image-wrap">
+        <img class="detail-image" src="{{ game.image_url }}" alt="{{ game.name }} cover">
+    </div>
+    {% endif %}
+
+    <div class="stack">
+        <div class="detail-card">
+            <h3>Description</h3>
+            <p>{{ short_description or 'No description is available for this game yet.' }}</p>
+        </div>
+
+        <div class="detail-card">
+            <h3>Metacritic score</h3>
+            <p>{% if metacritic_score is not none and metacritic_score != 'N/A' %}{{ metacritic_score }}/100{% else
+                %}N/A{% endif %}</p>
+        </div>
+
+        <div class="detail-card">
+            <h3>Top critic review</h3>
+            <p>{{ top_critic_review or 'No critic review available.' }}</p>
+        </div>
+
+        <div class="detail-card">
+            <h3>Top user review</h3>
+            <p>{{ top_user_review or 'No user review available.' }}</p>
+        </div>
+
+        <div class="detail-card">
+            <h3>Positive keywords</h3>
+            {% if positive_keywords %}
+            <div class="tag-row">
+                {% for keyword in positive_keywords %}
+                <span class="tag">{{ keyword }}</span>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p>No positive keywords listed.</p>
+            {% endif %}
+        </div>
+
+        <div class="detail-card">
+            <h3>Negative keywords</h3>
+            {% if negative_keywords %}
+            <div class="tag-row">
+                {% for keyword in negative_keywords %}
+                <span class="tag">{{ keyword }}</span>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p>No negative keywords listed.</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

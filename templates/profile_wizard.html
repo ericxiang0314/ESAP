@@ -49,11 +49,11 @@
                 {% endfor %}
             </div>
         </fieldset>
-        <label>
-            Notes
-            <textarea name="notes" rows="4"
+        <div class="notes-box">
+            <label for="profile-notes">Notes</label>
+            <textarea id="profile-notes" name="notes" rows="4"
                 placeholder="Add anything else you want to see in the list...">{{ notes }}</textarea>
-        </label>
+        </div>
         {% endif %}
 
         <div class="filter-grid">
