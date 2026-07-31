@@ -37,10 +37,10 @@
             <h3>Review notes</h3>
             <ol class="numbered-list">
                 {% if top_critic_review %}
-                <li>{{ top_critic_review }}</li>
+                <li>{{ top_critic_review | replace('0', '') }}</li>
                 {% endif %}
                 {% if top_user_review %}
-                <li>{{ top_user_review }}</li>
+                <li>{{ top_user_review | replace('0', '') }}</li>
                 {% endif %}
                 {% if not top_critic_review and not top_user_review %}
                 <li>No review notes available.</li>

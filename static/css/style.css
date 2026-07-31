@@ -7,7 +7,7 @@
     --text: #f3f8f5;
     --muted: #a8c7bd;
     --accent: #8dc7c4;
-    --accent-2: #89b9e8;
+    --accent-2: #8B5E3C;
     --border: #8b6b3f;
     --success: #8dc8a3;
     --error: #e89b9b;
@@ -98,17 +98,17 @@ main {
     flex: 1;
     min-height: 3.15rem;
     padding: 0.8rem 1rem;
-    border: 1px solid rgba(142, 184, 255, 0.35);
+    border: 1px solid rgba(220, 182, 154, 0.35);
     border-radius: 999px;
     font-size: 1rem;
-    background: #1d2b3d;
+    background: #214c43;
     color: var(--text);
 }
 
 .hero-search button {
     min-height: 3.15rem;
     padding: 0.8rem 1.15rem;
-    border: 1px solid rgba(142, 184, 255, 0.35);
+    border: 1px solid rgba(220, 182, 154, 0.35);
     border-radius: 999px;
     font-size: 1rem;
     background: linear-gradient(135deg, var(--accent), var(--accent-2));
@@ -157,7 +157,7 @@ button:active {
 
 .featured-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1rem;
 }
 
@@ -372,6 +372,7 @@ textarea {
     border-radius: 0.75rem;
     padding: 1rem;
     transition: none;
+    width: 100%;
 }
 
 .game-image {
@@ -433,6 +434,10 @@ textarea {
 .game-meta {
     color: var(--muted);
     margin: 0.4rem 0;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.35rem;
+    align-items: center;
 }
 
 .profile-list {
@@ -463,10 +468,13 @@ textarea {
 
     .hero,
     .section-grid,
-    .game-grid,
     .filter-grid,
     .featured-grid {
         grid-template-columns: 1fr;
+    }
+
+    .game-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .section-header {
@@ -480,13 +488,14 @@ textarea {
     gap: 0.6rem;
     padding: 1rem 1.1rem;
     border: 1px solid var(--border);
-    background: #1a2638;
+    background: #8B5E3C;
     border-radius: 0.75rem;
 }
 
 .numbered-list {
     margin: 0;
-    padding-left: 1.1rem;
+    padding-left: 0;
+    list-style: none;
     color: var(--text);
     display: grid;
     gap: 0.35rem;
