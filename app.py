@@ -12,7 +12,6 @@ from pymongo import MongoClient
 app = Flask(__name__)
 app.secret_key = "steam-recommender-dev"
 load_dotenv()
-
 # Connect to MongoDB database when a connection string is provided.
 MONGO_URI = os.getenv("MONGO_URI", "").strip()
 MONGO_AVAILABLE = False
@@ -28,7 +27,6 @@ if MONGO_URI:
         mongo_client = None
         mongo_collection = None
         MONGO_AVAILABLE = False
-
 submissions: list[dict] = []
 METACRITIC_FILE = None
 KEYWORDS_FILE = None
