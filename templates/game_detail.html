@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<!-- Detailed game view. -->
+<!-- Detailed view of a single game with metadata and reviews. -->
 <section class="card game-detail">
     <div class="section-header">
         <div>
@@ -26,9 +26,9 @@
             <h3>Metacritic score</h3>
             <p>
                 {% if metacritic_score is not none and metacritic_score != 'N/A' %}
-                    {{ metacritic_score }}/100
+                {{ metacritic_score }}/100
                 {% else %}
-                    N/A
+                N/A
                 {% endif %}
             </p>
         </div>
