@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<!-- Browse and filter games. -->
+<!-- After clicking on "Game List": page for browsing, filtering, and sorting games. -->
 <section class="card game-section">
     <div class="section-header">
         <div>
@@ -23,10 +23,7 @@
                     <select name="genre">
                         <option value="">All genres</option>
                         {% for option in genres %}
-                        <option value="{{ option }}"
-                            {% if genre == option %}
-                                selected
-                            {% endif %}>
+                        <option value="{{ option }}" {% if genre==option %} selected {% endif %}>
                             {{ option }}
                         </option>
                         {% endfor %}
@@ -41,10 +38,7 @@
                 <select name="language">
                     <option value="">Any language</option>
                     {% for option in languages %}
-                    <option value="{{ option|lower }}"
-                        {% if language == option|lower %}
-                            selected
-                        {% endif %}>
+                    <option value="{{ option|lower }}" {% if language==option|lower %} selected {% endif %}>
                         {{ option }}
                     </option>
                     {% endfor %}
@@ -56,22 +50,13 @@
             <label>
                 Sort by
                 <select name="sort_by">
-                    <option value="name"
-                        {% if sort_by == 'name' %}
-                            selected
-                        {% endif %}>
+                    <option value="name" {% if sort_by=='name' %} selected {% endif %}>
                         Name
                     </option>
-                    <option value="rating"
-                        {% if sort_by == 'rating' %}
-                            selected
-                        {% endif %}>
+                    <option value="rating" {% if sort_by=='rating' %} selected {% endif %}>
                         Rating
                     </option>
-                    <option value="price"
-                        {% if sort_by == 'price' %}
-                            selected
-                        {% endif %}>
+                    <option value="price" {% if sort_by=='price' %} selected {% endif %}>
                         Price
                     </option>
                 </select>
@@ -82,10 +67,8 @@
             <div class="checkbox-grid compact-tags">
                 {% for tag in tags %}
                 <label>
-                    <input type="checkbox" name="tag" value="{{ tag }}"
-                        {% if tag.lower() in selected_tags|map('lower') %}
-                            checked
-                        {% endif %}>
+                    <input type="checkbox" name="tag" value="{{ tag }}" {% if tag.lower() in selected_tags|map('lower')
+                        %} checked {% endif %}>
                     {{ tag }}
                 </label>
                 {% endfor %}
@@ -106,15 +89,15 @@
             <p class="game-meta">
                 Metacritic:
                 {% if game.rating is not none and game.rating != 0 and game.rating != 3.0 %}
-                    {{ game.rating }}/100
+                {{ game.rating }}/100
                 {% else %}
-                    N/A
+                N/A
                 {% endif %}
                 · Price:
                 {% if game.price == 0 %}
-                    Free
+                Free
                 {% else %}
-                    ${{ '%.2f'|format(game.price) }}
+                ${{ '%.2f'|format(game.price) }}
                 {% endif %}
             </p>
             <div class="tag-row">
