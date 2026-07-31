@@ -7,7 +7,7 @@
     --text: #f3f8f5;
     --muted: #a8c7bd;
     --accent: #8dc7c4;
-    --accent-2: #c29b72;
+    --accent-2: #89b9e8;
     --border: #8b6b3f;
     --success: #8dc8a3;
     --error: #e89b9b;
@@ -76,19 +76,6 @@ main {
 
 .hero-centered {
     justify-items: center;
-    text-align: center;
-}
-
-.hero-centered .hero-main {
-    text-align: center;
-}
-
-.page-title,
-.hero-copy {
-    text-align: center;
-}
-
-.eyebrow {
     text-align: left;
 }
 
@@ -111,17 +98,17 @@ main {
     flex: 1;
     min-height: 3.15rem;
     padding: 0.8rem 1rem;
-    border: 1px solid rgba(194, 155, 114, 0.35);
+    border: 1px solid rgba(142, 184, 255, 0.35);
     border-radius: 999px;
     font-size: 1rem;
-    background: #4a3526;
+    background: #1d2b3d;
     color: var(--text);
 }
 
 .hero-search button {
     min-height: 3.15rem;
     padding: 0.8rem 1.15rem;
-    border: 1px solid rgba(194, 155, 114, 0.35);
+    border: 1px solid rgba(142, 184, 255, 0.35);
     border-radius: 999px;
     font-size: 1rem;
     background: linear-gradient(135deg, var(--accent), var(--accent-2));
@@ -170,7 +157,7 @@ button:active {
 
 .featured-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1rem;
 }
 
@@ -180,7 +167,6 @@ button:active {
     gap: 0.4rem;
     text-decoration: none;
     color: var(--text);
-    min-width: 0;
 }
 
 .featured-card .game-image {
@@ -189,14 +175,6 @@ button:active {
 
 .featured-card .tag-row {
     margin-top: 0.2rem;
-    text-align: left;
-}
-
-.featured-card .game-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-    align-items: center;
 }
 
 .eyebrow {
@@ -218,12 +196,6 @@ h3 {
     font-size: 2rem;
     line-height: 1.15;
     margin-bottom: 0.35rem;
-}
-
-.game-detail .page-title {
-    text-align: center;
-    font-size: 2.3rem;
-    margin-bottom: 0.5rem;
 }
 
 .hero-copy {
@@ -425,7 +397,7 @@ textarea {
     object-fit: cover;
     border: 1px solid var(--border);
     border-radius: 0.75rem;
-    background: #3b2b1f;
+    background: #0f1722;
 }
 
 .game-card-top {
@@ -454,7 +426,7 @@ textarea {
 }
 
 .genre-tag {
-    background: #7a5b3a;
+    background: #2d3f61;
     color: var(--accent-2);
 }
 
@@ -508,7 +480,7 @@ textarea {
     gap: 0.6rem;
     padding: 1rem 1.1rem;
     border: 1px solid var(--border);
-    background: #4a3526;
+    background: #1a2638;
     border-radius: 0.75rem;
 }
 

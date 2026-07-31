@@ -195,11 +195,7 @@ def load_games(limit: int | None = None) -> list[dict]:
     if mongo_games:
         return mongo_games
     return load_games_from_csv(limit=limit)
-
-
 games = deduplicate_games(load_games())
-
-
 def get_filter_options() -> tuple[list[str], list[str], list[str]]:
     # Build filter choices.
     genres = sorted({game["genre"] for game in games if game.get("genre")})
