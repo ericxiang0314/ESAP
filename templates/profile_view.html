@@ -3,7 +3,7 @@
 <!-- Saved profile overview. -->
 <section class="card">
     <p class="eyebrow">Your profile</p>
-    <h2>View and update your preferences</h2>
+    <h2 class="page-title">View and update your preferences</h2>
     <p class="hero-copy">Your saved profile choices appear here. You can revisit them anytime and refine them.</p>
 
     {% if submissions %}
@@ -20,9 +20,15 @@
                     </form>
                 </div>
             </div>
-            {% if item.genres %}<p><strong>Genres:</strong> {{ item.genres | join(', ') }}</p>{% endif %}
-            {% if item.languages %}<p><strong>Languages:</strong> {{ item.languages | join(', ') }}</p>{% endif %}
-            {% if item.tags %}<p><strong>Tags:</strong> {{ item.tags | join(', ') }}</p>{% endif %}
+            {% if item.genres %}
+            <p><strong>Genres:</strong> {{ item.genres | join(', ') }}</p>
+            {% endif %}
+            {% if item.languages %}
+            <p><strong>Languages:</strong> {{ item.languages | join(', ') }}</p>
+            {% endif %}
+            {% if item.tags %}
+            <p><strong>Tags:</strong> {{ item.tags | join(', ') }}</p>
+            {% endif %}
         </div>
         {% endfor %}
     </div>

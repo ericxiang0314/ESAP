@@ -25,8 +25,13 @@
             <legend>Pick your genres</legend>
             <div class="checkbox-grid">
                 {% for genre in genres %}
-                <label><input type="checkbox" name="genres" value="{{ genre }}" {% if genre in selected_genres
-                        %}checked{% endif %}> {{ genre }}</label>
+                <label>
+                    <input type="checkbox" name="genres" value="{{ genre }}"
+                        {% if genre in selected_genres %}
+                            checked
+                        {% endif %}>
+                    {{ genre }}
+                </label>
                 {% endfor %}
             </div>
         </fieldset>
@@ -35,8 +40,13 @@
             <legend>Pick your languages</legend>
             <div class="checkbox-grid">
                 {% for language in languages %}
-                <label><input type="checkbox" name="languages" value="{{ language }}" {% if language in
-                        selected_languages %}checked{% endif %}> {{ language }}</label>
+                <label>
+                    <input type="checkbox" name="languages" value="{{ language }}"
+                        {% if language in selected_languages %}
+                            checked
+                        {% endif %}>
+                    {{ language }}
+                </label>
                 {% endfor %}
             </div>
         </fieldset>
@@ -45,8 +55,13 @@
             <legend>Pick your tags</legend>
             <div class="checkbox-grid">
                 {% for tag in tags %}
-                <label><input type="checkbox" name="tags" value="{{ tag }}" {% if tag in selected_tags %}checked{% endif
-                        %}> {{ tag }}</label>
+                <label>
+                    <input type="checkbox" name="tags" value="{{ tag }}"
+                        {% if tag in selected_tags %}
+                            checked
+                        {% endif %}>
+                    {{ tag }}
+                </label>
                 {% endfor %}
             </div>
         </fieldset>
@@ -58,7 +73,13 @@
             {% else %}
             <span></span>
             {% endif %}
-            <button type="submit">{% if step == 3 %}Finish profile{% else %}Continue{% endif %}</button>
+            <button type="submit">
+                {% if step == 3 %}
+                    Finish profile
+                {% else %}
+                    Continue
+                {% endif %}
+            </button>
         </div>
     </form>
 </section>

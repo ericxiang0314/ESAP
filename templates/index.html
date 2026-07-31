@@ -22,10 +22,20 @@
                     <div class="game-card-top">
                         <h3>{{ game.name }}</h3>
                     </div>
-                    <p class="game-meta">Metacritic: {% if game.rating is not none and game.rating != 0 and game.rating
-                        != 3.0 %}{{ game.rating }}/100{% else %}N/A{% endif %} · Price: {% if game.price == 0 %}Free{%
-                        else
-                        %}${{ '%.2f'|format(game.price) }}{% endif %}</p>
+                    <p class="game-meta">
+                        Metacritic:
+                        {% if game.rating is not none and game.rating != 0 and game.rating != 3.0 %}
+                            {{ game.rating }}/100
+                        {% else %}
+                            N/A
+                        {% endif %}
+                        · Price:
+                        {% if game.price == 0 %}
+                            Free
+                        {% else %}
+                            ${{ '%.2f'|format(game.price) }}
+                        {% endif %}
+                    </p>
                     <div class="tag-row">
                         <span class="tag genre-tag">{{ game.genre }}</span>
                         {% for tag in game.tags[:3] %}
@@ -50,9 +60,20 @@
                     <div class="game-card-top">
                         <h3>{{ game.name }}</h3>
                     </div>
-                    <p class="game-meta">Metacritic: {% if game.rating is not none and game.rating != 0 and game.rating!= 3.0 %}{{ game.rating }}/100{% else %}N/A{% endif %} · Price: {% if game.price == 0 %}Free{%
-                        else
-                        %}${{ '%.2f'|format(game.price) }}{% endif %}</p>
+                    <p class="game-meta">
+                        Metacritic:
+                        {% if game.rating is not none and game.rating != 0 and game.rating != 3.0 %}
+                            {{ game.rating }}/100
+                        {% else %}
+                            N/A
+                        {% endif %}
+                        · Price:
+                        {% if game.price == 0 %}
+                            Free
+                        {% else %}
+                            ${{ '%.2f'|format(game.price) }}
+                        {% endif %}
+                    </p>
                     <div class="tag-row">
                         <span class="tag genre-tag">{{ game.genre }}</span>
                         {% for tag in game.tags[:3] %}

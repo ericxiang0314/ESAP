@@ -24,8 +24,13 @@
 
         <div class="detail-card">
             <h3>Metacritic score</h3>
-            <p>{% if metacritic_score is not none and metacritic_score != 'N/A' %}{{ metacritic_score }}/100{% else
-                %}N/A{% endif %}</p>
+            <p>
+                {% if metacritic_score is not none and metacritic_score != 'N/A' %}
+                    {{ metacritic_score }}/100
+                {% else %}
+                    N/A
+                {% endif %}
+            </p>
         </div>
 
         <div class="detail-card">
