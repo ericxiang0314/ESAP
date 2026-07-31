@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
+<!-- Profile setup steps. -->
 <section class="card">
     <p class="eyebrow">Profile setup</p>
-    <h2>Step {{ step }} of 3</h2>
+    <h2 class="page-title">Step {{ step }} of 3</h2>
     <p class="hero-copy">
         {% if step == 1 %}
         Start with the genres that feel most like you, then we will narrow the list from there.
@@ -49,11 +50,6 @@
                 {% endfor %}
             </div>
         </fieldset>
-        <div class="notes-box">
-            <label for="profile-notes">Notes</label>
-            <textarea id="profile-notes" name="notes" rows="4"
-                placeholder="Add anything else you want to see in the list...">{{ notes }}</textarea>
-        </div>
         {% endif %}
 
         <div class="filter-grid">

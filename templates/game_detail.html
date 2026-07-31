@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
+<!-- Detailed game view. -->
 <section class="card game-detail">
     <div class="section-header">
         <div>
             <p class="eyebrow">Game detail</p>
-            <h2 class="single-line-title">{{ game.name }}</h2>
+            <h2 class="page-title single-line-title">{{ game.name }}</h2>
         </div>
         <a class="text-link" href="{{ url_for('game_list') }}">Back to catalogue</a>
     </div>
@@ -28,23 +29,28 @@
         </div>
 
         <div class="detail-card">
-            <h3>Top critic review</h3>
-            <p>{{ top_critic_review or 'No critic review available.' }}</p>
-        </div>
-
-        <div class="detail-card">
-            <h3>Top user review</h3>
-            <p>{{ top_user_review or 'No user review available.' }}</p>
+            <h3>Review notes</h3>
+            <ol class="numbered-list">
+                {% if top_critic_review %}
+                <li>{{ top_critic_review }}</li>
+                {% endif %}
+                {% if top_user_review %}
+                <li>{{ top_user_review }}</li>
+                {% endif %}
+                {% if not top_critic_review and not top_user_review %}
+                <li>No review notes available.</li>
+                {% endif %}
+            </ol>
         </div>
 
         <div class="detail-card">
             <h3>Positive keywords</h3>
             {% if positive_keywords %}
-            <div class="tag-row">
+            <ol class="numbered-list">
                 {% for keyword in positive_keywords %}
-                <span class="tag">{{ keyword }}</span>
+                <li>{{ keyword }}</li>
                 {% endfor %}
-            </div>
+            </ol>
             {% else %}
             <p>No positive keywords listed.</p>
             {% endif %}
@@ -53,11 +59,11 @@
         <div class="detail-card">
             <h3>Negative keywords</h3>
             {% if negative_keywords %}
-            <div class="tag-row">
+            <ol class="numbered-list">
                 {% for keyword in negative_keywords %}
-                <span class="tag">{{ keyword }}</span>
+                <li>{{ keyword }}</li>
                 {% endfor %}
-            </div>
+            </ol>
             {% else %}
             <p>No negative keywords listed.</p>
             {% endif %}

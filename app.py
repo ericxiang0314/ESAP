@@ -12,6 +12,7 @@ from pymongo import MongoClient
 app = Flask(__name__)
 app.secret_key = "steam-recommender-dev"
 load_dotenv()
+
 # Connect to MongoDB database when a connection string is provided.
 MONGO_URI = os.getenv("MONGO_URI", "").strip()
 MONGO_AVAILABLE = False
@@ -33,7 +34,7 @@ METACRITIC_FILE = None
 KEYWORDS_FILE = None
 DATASET_FILE = Path(__file__).resolve().parent / "games_with_metacritic.csv"
 def resolve_field(row: dict, names: list[str]) -> str:
-    # Look for the first matching column name in a row.
+    # Match column names safely.
     normalized = {str(key).strip().lower(): value for key, value in row.items() if key is not None}
     for name in names:
         key = str(name).strip().lower()
@@ -41,7 +42,7 @@ def resolve_field(row: dict, names: list[str]) -> str:
             return str(normalized[key] or "")
     return ""
 def parse_list_field(value: str) -> list[str]:
-    # Turn string lists into a clean Python list.
+    # Parse string lists cleanly.
     text = str(value or "").strip()
     if not text:
         return []
@@ -63,12 +64,12 @@ def parse_list_field(value: str) -> list[str]:
             if len(parts) > 1:
                 return parts
     return [text.strip()] if text.strip() else []
-def slugify_game_name(name: str) -> str:
-    # Create a URL-friendly version of a game title.
+def make_page_name(name: str) -> str:
+    # Build a URL-friendly name.
     return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
 def normalize_game(row: dict) -> dict:
     """Convert a raw MongoDB document or row into the shape expected by the templates."""
-    # Skip rows that do not have a game name.
+    # Skip rows without names.
     name = (resolve_field(row, ["name", "Name", "title"]) or "").strip()
     if not name:
         return {}
@@ -118,14 +119,14 @@ def normalize_game(row: dict) -> dict:
     }
 # Use a stable key so duplicate games are filtered out consistently.
 def make_game_key(game: dict) -> str:
-    # Create a stable identifier for duplicate checks.
+    # Build a stable key.
     appid = str(game.get("appid") or "").strip()
     if appid:
         return f"appid:{appid}"
     name = str(game.get("name") or "").strip().lower()
     return f"name:{name}"
 def deduplicate_games(game_list: list[dict]) -> list[dict]:
-    # Remove repeated games from the same dataset.
+    # Remove repeated entries.
     seen_keys: set[str] = set()
     unique_games: list[dict] = []
     for game in game_list:
@@ -139,7 +140,7 @@ def deduplicate_games(game_list: list[dict]) -> list[dict]:
     return unique_games
 def load_games_from_mongodb(limit: int | None = None) -> list[dict]:
     """Load the catalog from MongoDB Atlas when the connection is available."""
-    # Skip the MongoDB path if no connection is active.
+    # Skip MongoDB without connection.
     if not MONGO_AVAILABLE or mongo_collection is None:
         return []
     try:
@@ -153,8 +154,8 @@ def load_games_from_mongodb(limit: int | None = None) -> list[dict]:
                 game["short_description"] = resolve_field(document, ["short_description", "about_the_game", "detailed_description"]).strip() or ""
                 game["top_critic_review"] = resolve_field(document, ["top_critic_review", "reviews"]).strip() or ""
                 game["top_user_review"] = resolve_field(document, ["top_user_review", "user_score"]).strip() or ""
-                game["positive_keywords"] = parse_list_field(resolve_field(document, ["positive_keywords", "positive"]))
-                game["negative_keywords"] = parse_list_field(resolve_field(document, ["negative_keywords", "negative"]))
+                game["positive_keywords"] = parse_list_field(resolve_field(document, ["positive_keywords"]))
+                game["negative_keywords"] = parse_list_field(resolve_field(document, ["negative_keywords"]))
                 game["keyword_appid"] = resolve_field(document, ["appid", "app_id"]).strip()
                 loaded_games.append(game)
         return deduplicate_games(loaded_games)
@@ -162,7 +163,7 @@ def load_games_from_mongodb(limit: int | None = None) -> list[dict]:
         return []
 def load_games_from_csv(limit: int | None = None) -> list[dict]:
     """Load the full game catalog from the workspace CSV file when MongoDB is unavailable."""
-    # Stop early if the catalog file is missing.
+    # Stop if dataset is missing.
     if not DATASET_FILE.exists():
         return []
     try:
@@ -176,8 +177,8 @@ def load_games_from_csv(limit: int | None = None) -> list[dict]:
                     game["short_description"] = resolve_field(row, ["short_description", "about_the_game", "detailed_description"]).strip() or ""
                     game["top_critic_review"] = resolve_field(row, ["top_critic_review", "reviews"]).strip() or ""
                     game["top_user_review"] = resolve_field(row, ["top_user_review", "user_score"]).strip() or ""
-                    game["positive_keywords"] = parse_list_field(resolve_field(row, ["positive_keywords", "positive"]))
-                    game["negative_keywords"] = parse_list_field(resolve_field(row, ["negative_keywords", "negative"]))
+                    game["positive_keywords"] = parse_list_field(resolve_field(row, ["positive_keywords"]))
+                    game["negative_keywords"] = parse_list_field(resolve_field(row, ["negative_keywords"]))
                     game["keyword_appid"] = resolve_field(row, ["appid", "app_id"]).strip()
                     loaded_games.append(game)
                 if limit is not None and len(loaded_games) >= limit:
@@ -189,7 +190,7 @@ def load_games_from_csv(limit: int | None = None) -> list[dict]:
 
 def load_games(limit: int | None = None) -> list[dict]:
     """Prefer the MongoDB catalog and fall back to the full CSV dataset if the database is unavailable."""
-    # Try MongoDB first, then fall back to the CSV file.
+    # Try MongoDB first.
     mongo_games = load_games_from_mongodb(limit=limit)
     if mongo_games:
         return mongo_games
@@ -200,7 +201,7 @@ games = deduplicate_games(load_games())
 
 
 def get_filter_options() -> tuple[list[str], list[str], list[str]]:
-    # Build the filter choices from the current game list.
+    # Build filter choices.
     genres = sorted({game["genre"] for game in games if game.get("genre")})
     languages = sorted({language for game in games for language in game.get("languages", [])}, key=str.lower)
     tags = sorted({tag for game in games for tag in game.get("tags", [])}, key=str.lower)
@@ -209,7 +210,7 @@ def get_profile_options() -> tuple[list[str], list[str], list[str]]:
     return get_filter_options()
 def get_filtered_games(search_text: str = "", genre: str = "", language: str = "", tags: list[str] | None = None, sort_by: str = "name") -> list[dict]:
     """Filter and sort the current catalog for the browse page."""
-    # Normalize the requested tags so matching is easier.
+    # Normalize requested tags.
     selected_tags = [tag.lower() for tag in (tags or [])]
     filtered = []
     seen_keys: set[str] = set()
@@ -242,14 +243,8 @@ def get_filtered_games(search_text: str = "", genre: str = "", language: str = "
 @app.route("/")
 def home():
     """Render the home page and choose the recommended games for the active profile."""
-    # Pick the active profile from the query string or the latest saved one.
-    selected_profile_name = request.args.get("profile", "").strip()
-    selected_profile = None
-    if selected_profile_name:
-        selected_profile = next((item for item in submissions if str(item.get("name", "")).strip().lower() == selected_profile_name.lower()), None)
-    if selected_profile is None:
-        # Fall back to the most recent saved profile.
-        selected_profile = submissions[-1] if submissions else None
+    # Render home page.
+    selected_profile = submissions[-1] if submissions else None
     recommended_games = []
     if selected_profile:
         # Score games by matching the profile's genres, tags, and languages.
@@ -290,11 +285,10 @@ def home():
         submissions=submissions,
         errors=[],
         featured_games=featured_games,
-        selected_profile_name=selected_profile.get("name") if selected_profile else "",
     )
 @app.route("/games")
 def game_list():
-    # Read the search and filter values from the query string.
+    # Read filter values.
     search_text = request.args.get("search", "").strip()
     genre = request.args.get("genre", "").strip()
     language = request.args.get("language", "").strip()
@@ -320,24 +314,28 @@ def game_list():
         languages=languages,
         tags=tags,
     )
-@app.route("/game/<path:game_slug>")
-def game_detail(game_slug: str):
-    # Split the URL slug so an appid can be handled directly.
-    parts = [part for part in game_slug.split("/") if part]
+@app.route("/game/<path:game_path>")
+def game_detail(game_path: str):
+    # Split the route safely.
+    parts = [part for part in game_path.split("/") if part]
     appid = None
-    slug = game_slug
+    page_name = game_path
     if parts and parts[0].isdigit():
         appid = parts[0]
-        slug = "/".join(parts[1:]) if len(parts) > 1 else ""
+        page_name = "/".join(parts[1:]) if len(parts) > 1 else ""
     if appid:
-        # use direct appid lookup when there is one in the URL.
+        # Use direct appid lookup.
         matches = [game for game in games if str(game.get("appid", "")).strip() == appid]
     else:
         matches = []
     if not matches:
-        # Fall back to matching the name-based slug.
-        target_slug = slugify_game_name(slug or game_slug)
-        matches = [game for game in games if slugify_game_name(game.get("name", "")) == target_slug]
+        # Fall back to name lookup.
+        target_name = make_page_name(page_name or game_path)
+        matches = [
+            game
+            for game in games
+            if make_page_name(game.get("name", "")) == target_name
+        ]
 
     if not matches:
         flash("That game could not be found.", "error")
@@ -374,21 +372,23 @@ def delete_profile(index: int):
     return redirect(url_for("profile_view"))
 @app.route("/profile/edit/<int:index>", methods=["GET", "POST"])
 def edit_profile(index: int):
-    if not 0 <= index < len(submissions):
+    if not (0 <= index < len(submissions)):
         flash("That profile could not be found.", "error")
         return redirect(url_for("profile_view"))
     profile = submissions[index]
     if request.method == "POST":
-        profile["name"] = request.form.get("profile_name", "").strip() or "Untitled profile"
+        profile["name"] = (
+            request.form.get("profile_name", "").strip()
+            or "Untitled profile"
+        )
         profile["genres"] = request.form.getlist("genres")
         profile["languages"] = request.form.getlist("languages")
         profile["tags"] = request.form.getlist("tags")
-        profile["notes"] = request.form.get("notes", "").strip()
         flash("Profile updated.", "success")
         return redirect(url_for("profile_view"))
     genres, languages, tags = get_profile_options()
     return render_template(
-        "profile_wizard.html",
+        "profile_setup.html",
         step=3,
         genres=genres,
         languages=languages,
@@ -397,12 +397,11 @@ def edit_profile(index: int):
         selected_languages=profile.get("languages", []),
         selected_tags=profile.get("tags", []),
         profile_name=profile.get("name", ""),
-        notes=profile.get("notes", ""),
         edit_index=index,
     )
 @app.route("/profile/step/<int:step>", methods=["GET", "POST"])
 def profile_step(step: int):
-    # avoid invalid profile steps.
+    # Guard invalid steps.
     if step not in {1, 2, 3}:
         return redirect(url_for("profile_step", step=1))
     profile_data = dict(session.get("profile_data", {}))
@@ -413,21 +412,24 @@ def profile_step(step: int):
             profile_data["languages"] = request.form.getlist("languages")
         else:
             profile_data["tags"] = request.form.getlist("tags")
-            profile_data["notes"] = request.form.get("notes", "").strip()
         if step == 1 or request.form.get("profile_name"):
-            profile_data["profile_name"] = request.form.get("profile_name", "").strip()
+            profile_data["profile_name"] = (
+                request.form.get("profile_name", "").strip()
+            )
         session["profile_data"] = profile_data
         if step < 3:
             # Move to the next profile step.
             return redirect(url_for("profile_step", step=step + 1))
-        profile_name = str(profile_data.get("profile_name", "") or "").strip() or "Untitled profile"
+        profile_name = (
+            str(profile_data.get("profile_name", "") or "").strip()
+            or "Untitled profile"
+        )
         submission = {
             "timestamp": datetime.now().astimezone().replace(microsecond=0).isoformat().replace("+00:00", "Z"),
             "name": profile_name,
             "genres": profile_data.get("genres", []),
             "languages": profile_data.get("languages", []),
             "tags": profile_data.get("tags", []),
-            "notes": profile_data.get("notes", ""),
         }
         submissions.append(submission)
         session.pop("profile_data", None)
@@ -439,7 +441,7 @@ def profile_step(step: int):
     selected_tags = profile_data.get("tags", [])
     profile_name = profile_data.get("profile_name", "")
     return render_template(
-        "profile_wizard.html",
+        "profile_setup.html",
         step=step,
         genres=genres,
         languages=languages,
@@ -448,11 +450,10 @@ def profile_step(step: int):
         selected_languages=selected_languages,
         selected_tags=selected_tags,
         profile_name=profile_name,
-        notes=profile_data.get("notes", ""),
     )
 @app.route("/submit", methods=["POST"])
 def submit():
-    # Read the form fields for the legacy profile submission.
+    # Handle legacy form data.
     cpu = request.form.get("cpu", "").strip()
     gpu = request.form.get("gpu", "").strip()
     ram = request.form.get("ram", "").strip()

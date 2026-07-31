@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+<!-- Saved profile overview. -->
 <section class="card">
     <p class="eyebrow">Your profile</p>
     <h2>View and update your preferences</h2>
@@ -22,12 +23,11 @@
             {% if item.genres %}<p><strong>Genres:</strong> {{ item.genres | join(', ') }}</p>{% endif %}
             {% if item.languages %}<p><strong>Languages:</strong> {{ item.languages | join(', ') }}</p>{% endif %}
             {% if item.tags %}<p><strong>Tags:</strong> {{ item.tags | join(', ') }}</p>{% endif %}
-            {% if item.notes %}<p><strong>Notes:</strong> {{ item.notes }}</p>{% endif %}
         </div>
         {% endfor %}
     </div>
     {% else %}
-    <p>No profile saved yet. Start the wizard to create one.</p>
+    <p>No profile saved yet. Begin profile creation by clicking below.</p>
     {% endif %}
 
     <div class="section-header" style="margin-top: 1rem;">

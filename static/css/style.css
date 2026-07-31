@@ -8,7 +8,7 @@
     --muted: #a8c7bd;
     --accent: #8dc7c4;
     --accent-2: #89b9e8;
-    --border: #356b60;
+    --border: #8b6b3f;
     --success: #8dc8a3;
     --error: #e89b9b;
 }
@@ -148,18 +148,6 @@ button:active {
     width: 100%;
 }
 
-.profile-switcher {
-    width: 100%;
-    display: grid;
-    gap: 0.3rem;
-    text-align: left;
-}
-
-.profile-switcher label {
-    color: var(--muted);
-    font-weight: bold;
-}
-
 .featured-section h2 {
     font-size: 1.15rem;
     margin-bottom: 0.6rem;
@@ -204,6 +192,12 @@ h3 {
     margin: 0;
 }
 
+.page-title {
+    font-size: 1.7rem;
+    line-height: 1.2;
+    margin-bottom: 0.2rem;
+}
+
 .hero-copy {
     color: var(--muted);
     line-height: 1.6;
@@ -213,13 +207,14 @@ h3 {
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: 0;
-    padding: 1rem;
-    margin-bottom: 0.8rem;
+    padding: 1.1rem 1.2rem;
+    margin-bottom: 1rem;
+    box-shadow: none;
 }
 
 .stack {
     display: grid;
-    gap: 0.7rem;
+    gap: 0.9rem;
 }
 
 label,
@@ -236,8 +231,8 @@ textarea {
 .checkbox-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.5rem;
-    margin-top: 0.35rem;
+    gap: 0.7rem;
+    margin-top: 0.45rem;
 }
 
 .checkbox-grid label {
@@ -320,29 +315,6 @@ textarea {
     font-weight: normal;
 }
 
-.notes-box {
-    display: grid;
-    gap: 0.4rem;
-    padding: 0.8rem;
-    border: 1px solid var(--border);
-    background: #1d2b3d;
-    border-radius: 0.85rem;
-}
-
-.notes-box label {
-    color: var(--text);
-    font-weight: 600;
-}
-
-.notes-box textarea {
-    width: 100%;
-    border-radius: 0.75rem;
-    border: 1px solid rgba(142, 184, 255, 0.28);
-    background: #172233;
-    color: var(--text);
-    padding: 0.75rem;
-}
-
 .text-link {
     color: var(--accent);
     text-decoration: none;
@@ -356,7 +328,7 @@ textarea {
 }
 
 .filter-step {
-    padding: 0.8rem;
+    padding: 0.95rem;
     border: 1px solid var(--border);
     background: #214c43;
 }
@@ -398,7 +370,8 @@ textarea {
     background: #214c43;
     border: 1px solid var(--border);
     border-radius: 0;
-    padding: 0.8rem;
+    padding: 0.95rem;
+    transition: none;
 }
 
 .game-image {
@@ -418,12 +391,12 @@ textarea {
 
 .detail-image {
     display: block;
-    width: auto;
-    max-width: 100%;
-    max-height: 320px;
-    object-fit: contain;
+    width: 100%;
+    max-width: 760px;
+    max-height: 360px;
+    object-fit: cover;
     border: 1px solid var(--border);
-    border-radius: 0.7rem;
+    border-radius: 0.75rem;
     background: #0f1722;
 }
 
@@ -481,7 +454,7 @@ textarea {
 }
 
 .profile-card:hover {
-    background: #233449;
+    background: #214c43;
 }
 
 .profile-card span {
@@ -507,11 +480,19 @@ textarea {
 
 .detail-card {
     display: grid;
-    gap: 0.45rem;
-    padding: 0.9rem 1rem;
+    gap: 0.6rem;
+    padding: 1rem 1.1rem;
     border: 1px solid var(--border);
     background: #1a2638;
-    border-radius: 0.8rem;
+    border-radius: 0.75rem;
+}
+
+.numbered-list {
+    margin: 0;
+    padding-left: 1.1rem;
+    color: var(--text);
+    display: grid;
+    gap: 0.35rem;
 }
 
 .detail-card h3 {

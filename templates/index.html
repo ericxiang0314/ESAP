@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+<!-- Home page content. -->
 <section class="hero hero-centered">
     <div class="hero-main">
         <h1>Find your Steam Games</h1>
@@ -8,26 +9,13 @@
             <button type="submit">Search</button>
         </form>
 
-        {% if submissions %}
-        <div class="profile-switcher">
-            <label for="profile-select">Switch profile</label>
-            <select id="profile-select" onchange="location.href='/?profile=' + encodeURIComponent(this.value)">
-                <option value="" {% if not selected_profile_name %}selected{% endif %}>Latest saved profile</option>
-                {% for item in submissions %}
-                <option value="{{ item.name }}" {% if selected_profile_name==item.name %}selected{% endif %}>{{
-                    item.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        {% endif %}
-
         {% if recommended_games %}
         <div class="featured-section">
             <h2>Recommended for you</h2>
             <div class="featured-grid">
                 {% for game in recommended_games %}
                 <a class="game-card featured-card"
-                    href="{{ url_for('game_detail', game_slug=game.name|lower|replace(' ', '-') ) }}">
+                    href="{{ url_for('game_detail', game_path=game.name|lower|replace(' ', '-') ) }}">
                     {% if game.image_url %}
                     <img class="game-image" src="{{ game.image_url }}" alt="{{ game.name }} cover">
                     {% endif %}
@@ -55,7 +43,7 @@
             <div class="featured-grid">
                 {% for game in featured_games %}
                 <a class="game-card featured-card"
-                    href="{{ url_for('game_detail', game_slug=game.name|lower|replace(' ', '-') ) }}">
+                    href="{{ url_for('game_detail', game_path=game.name|lower|replace(' ', '-') ) }}">
                     {% if game.image_url %}
                     <img class="game-image" src="{{ game.image_url }}" alt="{{ game.name }} cover">
                     {% endif %}

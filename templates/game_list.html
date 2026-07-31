@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
+<!-- Browse and filter games. -->
 <section class="card game-section">
     <div class="section-header">
         <div>
             <p class="eyebrow">Game catalogue</p>
-            <h2>Browse and sort games</h2>
+            <h2 class="page-title">Browse and sort games</h2>
         </div>
         <a class="text-link" href="{{ url_for('game_list') }}">Clear filters</a>
     </div>
@@ -66,7 +67,7 @@
 
     <div class="game-grid">
         {% for game in games %}
-        <a class="game-card" href="{{ url_for('game_detail', game_slug=game.name|lower|replace(' ', '-') ) }}">
+        <a class="game-card" href="{{ url_for('game_detail', game_path=game.name|lower|replace(' ', '-') ) }}">
             {% if game.image_url %}
             <img class="game-image" src="{{ game.image_url }}" alt="{{ game.name }} cover">
             {% endif %}

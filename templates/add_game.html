@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
+<!-- Manual game entry form. -->
 <section class="card">
     <p class="eyebrow">Add a game</p>
-    <h2>Share a game you want in the list</h2>
+    <h2 class="page-title">Share a game you want in the list</h2>
     <p class="hero-copy">Use this page to add a game manually. It will appear in the catalogue right away.</p>
 
     <form action="{{ url_for('add_game') }}" method="post" class="stack add-game-form">
