@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<!-- Profile setup steps. -->
+<!-- Multi-step form for creating a new user profile for personal recommendations -->
 <section class="card">
     <p class="eyebrow">Profile setup</p>
     <h2 class="page-title">Step {{ step }} of 3</h2>
@@ -26,9 +26,7 @@
             <div class="checkbox-grid">
                 {% for genre in genres %}
                 <label>
-                    <input type="checkbox" name="genres" value="{{ genre }}"
-                        {% if genre in selected_genres %}
-                            checked
+                    <input type="checkbox" name="genres" value="{{ genre }}" {% if genre in selected_genres %} checked
                         {% endif %}>
                     {{ genre }}
                 </label>
@@ -41,10 +39,8 @@
             <div class="checkbox-grid">
                 {% for language in languages %}
                 <label>
-                    <input type="checkbox" name="languages" value="{{ language }}"
-                        {% if language in selected_languages %}
-                            checked
-                        {% endif %}>
+                    <input type="checkbox" name="languages" value="{{ language }}" {% if language in selected_languages
+                        %} checked {% endif %}>
                     {{ language }}
                 </label>
                 {% endfor %}
@@ -56,10 +52,8 @@
             <div class="checkbox-grid">
                 {% for tag in tags %}
                 <label>
-                    <input type="checkbox" name="tags" value="{{ tag }}"
-                        {% if tag in selected_tags %}
-                            checked
-                        {% endif %}>
+                    <input type="checkbox" name="tags" value="{{ tag }}" {% if tag in selected_tags %} checked {% endif
+                        %}>
                     {{ tag }}
                 </label>
                 {% endfor %}
@@ -75,9 +69,9 @@
             {% endif %}
             <button type="submit">
                 {% if step == 3 %}
-                    Finish profile
+                Finish profile
                 {% else %}
-                    Continue
+                Continue
                 {% endif %}
             </button>
         </div>
