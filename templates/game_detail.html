@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- Detailed view of a single game with metadata and reviews. -->
+<section class="card game-detail">
+    <div class="section-header">
+        <div>
+            <p class="eyebrow">Game detail</p>
+            <h2 class="page-title single-line-title">{{ game.name }}</h2>
+        </div>
+        <a class="text-link" href="{{ url_for('game_list') }}">Back to catalogue</a>
+    </div>
+
+    {% if game.image_url %}
+    <div class="detail-image-wrap">
+        <img class="detail-image" src="{{ game.image_url }}" alt="{{ game.name }} cover">
+    </div>
+    {% endif %}
+
+    <div class="stack">
+        <div class="detail-card">
+            <h3>Description</h3>
+            <p>{{ short_description or 'No description is available for this game yet.' }}</p>
+        </div>
+
+        <div class="detail-card">
+            <h3>Metacritic score</h3>
+            <p>
+                {% if metacritic_score is not none and metacritic_score != 'N/A' %}
+                {{ metacritic_score }}/100
+                {% else %}
+                N/A
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="detail-card">
+            <h3>Review notes</h3>
+            <ol class="numbered-list">
+                {% if top_critic_review %}
+                <li>{{ top_critic_review }}</li>
+                {% endif %}
+                {% if top_user_review %}
+                <li>{{ top_user_review }}</li>
+                {% endif %}
+                {% if not top_critic_review and not top_user_review %}
+                <li>No review notes available.</li>
+                {% endif %}
+            </ol>
+        </div>
+
+        <div class="detail-card">
+            <h3>Positive keywords</h3>
+            {% if positive_keywords %}
+            <ol class="numbered-list">
+                {% for keyword in positive_keywords %}
+                <li>{{ keyword }}</li>
+                {% endfor %}
+            </ol>
+            {% else %}
+            <p>No positive keywords listed.</p>
+            {% endif %}
+        </div>
+
+        <div class="detail-card">
+            <h3>Negative keywords</h3>
+            {% if negative_keywords %}
+            <ol class="numbered-list">
+                {% for keyword in negative_keywords %}
+                <li>{{ keyword }}</li>
+                {% endfor %}
+            </ol>
+            {% else %}
+            <p>No negative keywords listed.</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

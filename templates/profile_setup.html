@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- Multi-step form for creating a new user profile for personal recommendations -->
+<section class="card">
+    <p class="eyebrow">Profile setup</p>
+    <h2 class="page-title">Step {{ step }} of 3</h2>
+    <p class="hero-copy">
+        {% if step == 1 %}
+        Start with the genres that feel most like you, then we will narrow the list from there.
+        {% elif step == 2 %}
+        Pick the languages you want to see in the catalog so the recommendations feel more relevant.
+        {% else %}
+        Choose a few tags that match your style, then finish and keep browsing the games.
+        {% endif %}
+    </p>
+
+    <form method="post" class="stack">
+        {% if step == 1 %}
+        <label>
+            Profile name
+            <input type="text" name="profile_name" value="{{ profile_name }}" placeholder="e.g. Cozy solo games"
+                required>
+        </label>
+        <fieldset>
+            <legend>Pick your genres</legend>
+            <div class="checkbox-grid">
+                {% for genre in genres %}
+                <label>
+                    <input type="checkbox" name="genres" value="{{ genre }}" {% if genre in selected_genres %} checked
+                        {% endif %}>
+                    {{ genre }}
+                </label>
+                {% endfor %}
+            </div>
+        </fieldset>
+        {% elif step == 2 %}
+        <fieldset>
+            <legend>Pick your languages</legend>
+            <div class="checkbox-grid">
+                {% for language in languages %}
+                <label>
+                    <input type="checkbox" name="languages" value="{{ language }}" {% if language in selected_languages
+                        %} checked {% endif %}>
+                    {{ language }}
+                </label>
+                {% endfor %}
+            </div>
+        </fieldset>
+        {% else %}
+        <fieldset>
+            <legend>Pick your tags</legend>
+            <div class="checkbox-grid">
+                {% for tag in tags %}
+                <label>
+                    <input type="checkbox" name="tags" value="{{ tag }}" {% if tag in selected_tags %} checked {% endif
+                        %}>
+                    {{ tag }}
+                </label>
+                {% endfor %}
+            </div>
+        </fieldset>
+        {% endif %}
+
+        <div class="filter-grid">
+            {% if step > 1 %}
+            <a class="text-link" href="{{ url_for('profile_step', step=step - 1) }}">Back</a>
+            {% else %}
+            <span></span>
+            {% endif %}
+            <button type="submit">
+                {% if step == 3 %}
+                Finish profile
+                {% else %}
+                Continue
+                {% endif %}
+            </button>
+        </div>
+    </form>
+</section>
+{% endblock %}
