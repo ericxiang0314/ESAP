@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<!-- Home page content. -->
+<!-- Search page and featured or recommended games. -->
 <section class="hero hero-centered">
     <div class="hero-main">
         <h1>Find your Steam Games</h1>
@@ -25,15 +25,15 @@
                     <p class="game-meta">
                         Metacritic:
                         {% if game.rating is not none and game.rating != 0 and game.rating != 3.0 %}
-                            {{ game.rating }}/100
+                        {{ game.rating }}/100
                         {% else %}
-                            N/A
+                        N/A
                         {% endif %}
                         · Price:
                         {% if game.price == 0 %}
-                            Free
+                        Free
                         {% else %}
-                            ${{ '%.2f'|format(game.price) }}
+                        ${{ '%.2f'|format(game.price) }}
                         {% endif %}
                     </p>
                     <div class="tag-row">
@@ -63,15 +63,15 @@
                     <p class="game-meta">
                         Metacritic:
                         {% if game.rating is not none and game.rating != 0 and game.rating != 3.0 %}
-                            {{ game.rating }}/100
+                        {{ game.rating }}/100
                         {% else %}
-                            N/A
+                        N/A
                         {% endif %}
                         · Price:
                         {% if game.price == 0 %}
-                            Free
+                        Free
                         {% else %}
-                            ${{ '%.2f'|format(game.price) }}
+                        ${{ '%.2f'|format(game.price) }}
                         {% endif %}
                     </p>
                     <div class="tag-row">
